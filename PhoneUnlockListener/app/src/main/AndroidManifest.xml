@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="lt.rasimas.phone_unlock_listener">
+
+    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE"/>
+    <uses-permission android:name="android.permission.WAKE_LOCK"/>
+
+    <application
+        android:allowBackup="true"
+        android:icon="@drawable/ic_launcher"
+        android:label="@string/app_name"
+        android:roundIcon="@drawable/round_launcher"
+        android:supportsRtl="true"
+        android:theme="@style/Theme.AppCompat.DayNight">
+        <service
+            android:name="lt.rasimas.phone_unlock_listener.ForeverService"
+            android:enabled="true"
+            android:exported="false">
+        </service>
+        <activity android:name="lt.rasimas.phone_unlock_listener.MainActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+    </application>
+
+</manifest>
