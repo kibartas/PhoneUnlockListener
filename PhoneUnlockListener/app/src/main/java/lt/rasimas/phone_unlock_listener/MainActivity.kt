@@ -1,6 +1,7 @@
 package lt.rasimas.phone_unlock_listener
 
 import android.annotation.SuppressLint
+import android.app.AlertDialog
 import android.app.KeyguardManager
 import android.content.BroadcastReceiver
 import android.content.Context
@@ -13,7 +14,6 @@ import android.widget.TextView
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import com.android.volley.Request
-import com.android.volley.Response
 import com.android.volley.toolbox.StringRequest
 import com.android.volley.toolbox.Volley
 
@@ -27,9 +27,25 @@ class MainActivity : AppCompatActivity() {
 
         startForegroundService(Intent(this, ForeverService::class.java))
 
+        val builder = AlertDialog.Builder(this)
+        builder.setTitle("Are you sure?")
+        builder.setMessage("This will reset your count to 0")
+        builder.setPositiveButton(R.string.yes) { _, _ ->
+            val queue = Volley.newRequestQueue(this)
+            val url = "https://howmanytimeshaveiunlockedmyphonetoday.rasimas.lt/api/reset"
+
+            val stringRequest = StringRequest(Request.Method.POST, url, {}, {})
+            queue.add(stringRequest)
+        }
+
+        builder.setNegativeButton(R.string.no) { dialog, _ ->
+            dialog.dismiss()
+        }
+
+
         val switch: Switch = findViewById(R.id.switch1)
 
-        switch.setOnCheckedChangeListener { buttonView, isChecked ->
+        switch.setOnCheckedChangeListener { _, isChecked ->
             if (!isChecked) {
                 stopService(Intent(this, ForeverService::class.java))
                 switch.text = "Off"
@@ -41,14 +57,7 @@ class MainActivity : AppCompatActivity() {
 
         val resetButton: Button = findViewById(R.id.reset)
         resetButton.setOnClickListener {
-            val queue = Volley.newRequestQueue(this)
-            val url = "https://howmanytimeshaveiunlockedmyphonetoday.rasimas.lt/api/reset"
-
-            val stringRequest = StringRequest(Request.Method.POST, url,
-                { _ -> },
-                { _ -> }
-            )
-            queue.add(stringRequest)
+            builder.show()
         }
 
 
@@ -58,11 +67,11 @@ class MainActivity : AppCompatActivity() {
             val queue = Volley.newRequestQueue(this)
             val url = "https://howmanytimeshaveiunlockedmyphonetoday.rasimas.lt/api"
 
-            val stringRequest = StringRequest(Request.Method.POST, url,
+            val stringRequest = StringRequest(Request.Method.GET, url,
                 { response ->
-                    textView.text = response
+                    textView.text = response.subSequence(1, response.length - 2)
                 },
-                Response.ErrorListener { textView.text = "Some kinda error happened!" }
+                { textView.text = "Some kinda error happened!" }
             )
             queue.add(stringRequest)
         }
@@ -71,17 +80,16 @@ class MainActivity : AppCompatActivity() {
 
 class PhoneUnlockedReceiver : BroadcastReceiver() {
     override fun onReceive(context: Context?, intent: Intent?) {
-        if (intent?.action != Intent.ACTION_USER_PRESENT) { return }
+        if (intent?.action != Intent.ACTION_USER_PRESENT) {
+            return
+        }
         val keyguardManager =
             context!!.getSystemService(Context.KEYGUARD_SERVICE) as KeyguardManager
         if (!keyguardManager.isKeyguardLocked) {
             val queue = Volley.newRequestQueue(context)
             val url = "https://howmanytimeshaveiunlockedmyphonetoday.rasimas.lt/api/increase"
 
-            val stringRequest = StringRequest(Request.Method.POST, url,
-                { _ -> },
-                { _ -> }
-            )
+            val stringRequest = StringRequest(Request.Method.POST, url, {}, {})
             queue.add(stringRequest)
         }
 
