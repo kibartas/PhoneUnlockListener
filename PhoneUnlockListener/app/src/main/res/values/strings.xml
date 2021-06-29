@@ -1,8 +1,8 @@
 <resources>
     <string name="app_name">Phone Unlock Listener</string>
-    <string name="turn_off">Turn off</string>
     <string name="reset">Reset</string>
     <string name="get_current">Get current</string>
     <string name="yes">Yes</string>
     <string name="no">No</string>
+    <string name="on">On</string>
 </resources>
