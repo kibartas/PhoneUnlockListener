@@ -17,6 +17,9 @@
 
 ### Website:
 - fetches new phone unlock count every 50ms
+
+![Screenshot](docs/images/website.png)
+
 ### API:
 - listens for POST|GET requests either for reset/increase or count retrieval
 
