@@ -1,13 +1,105 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;700&display=swap');
+
 html {
     background-color: #12131C;
+	height: 100vh;
+}
+
+footer, #historyDiv, body {
+	display: flex;
 }
 
 * {
-    color: rgb(201, 209, 217);
+    color: white;
+	font-family: 'Montserrat', sans-serif;
+	font-weight: 300;
 }
 
-#source {
-	position: absolute;
-	top: 90vh;
+body, #historyDiv {
+	flex-direction: column;
+	align-items: center;
 }
 
+body {
+	justify: space-between;
+	height: 100vh;
+	overflow-x: hidden;
+	overflow-y: hidden;
+}
+
+#historyDiv {
+	height: 90vh;
+	width: 90vw;
+}
+
+h1 {
+	text-align: center;
+	font-size: 36px;
+}
+
+#canvasHolder {
+	height: 60vh;
+	width: 85vw;
+}
+
+canvas {
+	height: 100%;
+	width: 100%;
+}
+
+#counter {
+	border-radius: 100%;
+	border: 2px solid rgba(40, 223, 40, 1);
+	width: 120px;
+	height: 120px;
+	line-height: 2;
+	font-size: 60px;
+	font-weight: 900;
+	text-shadow: 2px 2px rgba(40, 223, 40, 0.4);
+	display: inline-flex;
+	justify-content: center;
+	align-items: center;
+}
+
+h4 {
+	margin-bottom: 0px;
+	display: flex;
+}
+
+a > h4 {
+	color: rgba(40, 223, 40, 1);
+}
+
+footer {
+	left: 5%;
+	bottom: 0;
+	width: 90%;
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	height: 10vh;
+}
+
+h3 {
+	font-size: 24px;
+	margin-bottom: 0px;
+}
+
+@media only screen and (max-width: 600px) {
+	h1 {
+		font-size: 32px;
+	}
+}
+
+@media only screen and (max-width: 400px) {
+	h1 {
+		font-size: 26px;
+	}
+
+	#counter {
+		width: 80px;
+		height: 80px;
+		line-height: 2;
+		font-size: 40px;
+	}
+}
