@@ -51,9 +51,9 @@ const goBack = () => {
 }
 
 const goForward = () => {
-	if (searchedMonth < 12) {
+	if (searchedMonth < 11) {
 		searchedMonth += 1;	
-	} else if (searchedMonth === 12) {
+	} else if (searchedMonth === 11) {
 		searchedMonth = 1;
 		searchedYear += 1;
 	}
