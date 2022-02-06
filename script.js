@@ -43,7 +43,7 @@ const goBack = () => {
 	if (searchedMonth >= 1) {
 		searchedMonth -= 1;	
 	} else if (searchedMonth === 0) {
-		searchedMonth = 12;
+		searchedMonth = 11;
 		searchedYear -= 1;
 	}
 	historyChart.destroy();
