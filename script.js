@@ -54,7 +54,7 @@ const goForward = () => {
 	if (searchedMonth < 11) {
 		searchedMonth += 1;	
 	} else if (searchedMonth === 11) {
-		searchedMonth = 1;
+		searchedMonth = 0;
 		searchedYear += 1;
 	}
 	historyChart.destroy();
