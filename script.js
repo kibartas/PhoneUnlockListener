@@ -67,13 +67,13 @@ document.addEventListener("DOMContentLoaded", () => {
 
 const draw = () => {
 	return historyArray.then(farr => {
-			let today = `${todayDate.getFullYear()}-${(searchedMonth + 1).toString().padStart(2, '0')}`
+			let today = `${searchedYear}-${(searchedMonth + 1).toString().padStart(2, '0')}`
 			farr = farr.slice();
 			if (searchedMonth === todayDate.getMonth()) {
 				today += `-${todayDate.getDate().toString().padStart(2, '0')}`;
 				farr.push(`${today}: 1`);
 			}
-			const searchedMonthHistoryIndices = getMonthIndices(`${todayDate.getFullYear()}-${(searchedMonth + 1).toString().padStart(2, '0')}`, farr);
+			const searchedMonthHistoryIndices = getMonthIndices(`${searchedYear}-${(searchedMonth + 1).toString().padStart(2, '0')}`, farr);
 			if (searchedMonthHistoryIndices[0] === 0) {
 				document.getElementById('arrowLeft').style.visibility = "hidden";
 			} else {
