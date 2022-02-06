@@ -42,6 +42,12 @@ h1 {
 	width: 85vw;
 }
 
+#chartTitle {
+	color: rgba(40, 223, 40, 1);
+	font-weight: normal;
+	font-size: 18px;
+}
+
 canvas {
 	height: 100%;
 	width: 100%;

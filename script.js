@@ -102,6 +102,7 @@ const draw = () => {
 				acc['data'].push(labelAndData[1]);
 				return acc;
 			}, {});
+			document.getElementById('chartTitle').innerText = title;
 			Chart.defaults.font.family = 'Montserrat';
 			Chart.defaults.color = "white";
 			Chart.defaults.borderColor = "white";
