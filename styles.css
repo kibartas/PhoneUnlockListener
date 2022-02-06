@@ -118,10 +118,10 @@ h3 {
 }
 
 #arrowLeft {
-	border-left: 14px solid rgba(40, 223, 40, 1);
+	border-right: 14px solid rgba(40, 223, 40, 1);
 }
 
 #arrowRight {
-	border-right: 14px solid rgba(40, 223, 40, 1);
+	border-left: 14px solid rgba(40, 223, 40, 1);
 	visibility: collapse;
 }
