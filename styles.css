@@ -46,6 +46,7 @@ h1 {
 	color: rgba(40, 223, 40, 1);
 	font-weight: normal;
 	font-size: 18px;
+	text-decoration: underline;
 }
 
 canvas {
