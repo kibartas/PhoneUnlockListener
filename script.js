@@ -4,19 +4,18 @@ const todayDate = new Date(new Date().toLocaleString("lt-LT", { timeZone: 'Europ
 const historyArray = fetch('https://howmanytimeshaveiunlockedmyphonetoday.rasimas.lt/history.txt')
 		.then(response => response.text())
 		.then(resp => {
-			let title = '';
 			let hArray = resp.split('\n');
 			hArray.pop();
 			return hArray;
 		});
 
 let searchedMonth = todayDate.getMonth();
+let searchedYear = todayDate.getFullYear();
 let historyChart = null;
 
 
 
 const refresh = (cnt) => {
-	let num = 0;
 	const chart = historyChart;
 	fetch('https://howmanytimeshaveiunlockedmyphonetoday.rasimas.lt/api') 
 		.then(response => response.json())
@@ -43,6 +42,9 @@ const getMonthIndices = (yearAndMonth, historyArray) =>
 const goBack = () => {
 	if (searchedMonth >= 1) {
 		searchedMonth -= 1;	
+	} else if (searchedMonth === 0) {
+		searchedMonth = 12;
+		searchedYear -= 1;
 	}
 	historyChart.destroy();
 	draw();
@@ -51,17 +53,19 @@ const goBack = () => {
 const goForward = () => {
 	if (searchedMonth < 12) {
 		searchedMonth += 1;	
+	} else if (searchedMonth === 12) {
+		searchedMonth = 1;
+		searchedYear += 1;
 	}
 	historyChart.destroy();
 	draw();
 }
 
-document.addEventListener("DOMContentLoaded", (event) => {
+document.addEventListener("DOMContentLoaded", () => {
 	draw().then(() => refresh(document.getElementById("counter"), historyChart));
 });
 
 const draw = () => {
-	let counter = document.getElementById("counter")
 	return historyArray.then(farr => {
 			let today = `${todayDate.getFullYear()}-${(searchedMonth + 1).toString().padStart(2, '0')}`
 			farr = farr.slice();
@@ -91,7 +95,7 @@ const draw = () => {
 					acc['data'] = [];
 				}
 				labelAndData[0] = labelAndData[0].split('-');
-				if (title === '') title = `${months[(searchedMonth).toString()]}, ${todayDate.getFullYear()}`;
+				if (title === '') title = `${months[(searchedMonth).toString()]}, ${searchedYear}`;
 				labelAndData[0].shift();
 				labelAndData[0].shift();
 				acc['labels'].push(labelAndData[0]);
