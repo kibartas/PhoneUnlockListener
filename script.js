@@ -69,7 +69,7 @@ const draw = () => {
 	return historyArray.then(farr => {
 			let today = `${searchedYear}-${(searchedMonth + 1).toString().padStart(2, '0')}`
 			farr = farr.slice();
-			if (searchedMonth === todayDate.getMonth()) {
+			if (searchedMonth === todayDate.getMonth() && searchedYear === todayDate.getFullYear()) {
 				today += `-${todayDate.getDate().toString().padStart(2, '0')}`;
 				farr.push(`${today}: 1`);
 			}
