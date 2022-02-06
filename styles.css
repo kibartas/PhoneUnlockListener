@@ -21,6 +21,7 @@ body, #historyDiv {
 }
 
 body {
+	justify: space-between;
 	height: 100vh;
 	overflow-x: hidden;
 	overflow-y: hidden;
