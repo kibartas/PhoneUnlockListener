@@ -1,30 +1,87 @@
+// Global vars
 const months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
-const refresh = (cnt, chart) => {
+const todayDate = new Date(new Date().toLocaleString("lt-LT", { timeZone: 'Europe/Vilnius' }))
+const historyArray = fetch('https://howmanytimeshaveiunlockedmyphonetoday.rasimas.lt/history.txt')
+		.then(response => response.text())
+		.then(resp => {
+			let title = '';
+			let hArray = resp.split('\n');
+			hArray.pop();
+			return hArray;
+		});
+
+let searchedMonth = todayDate.getMonth();
+let historyChart = null;
+
+
+
+const refresh = (cnt) => {
 	let num = 0;
+	const chart = historyChart;
 	fetch('https://howmanytimeshaveiunlockedmyphonetoday.rasimas.lt/api') 
 		.then(response => response.json())
 		.then(txt => {
 			cnt.innerText = txt;
-			const chartData = chart.data.datasets[0].data;
-			const curVal = chartData[chartData.length - 1];
-			if (txt !== curVal) {
-				chart.data.datasets[0].data[chartData.length - 1] = txt.toString();
-				chart.update();
+			if (searchedMonth === todayDate.getMonth()) {
+				const chartData = chart.data.datasets[0].data;
+				const curVal = chartData[chartData.length - 1];
+				if (txt !== curVal) {
+					chart.data.datasets[0].data[chartData.length - 1] = txt.toString();
+					chart.update();
+				}
 			}
 		})
 		.catch(() => {});
-		setTimeout(() => refresh(cnt, chart), 50);
+		setTimeout(() => refresh(cnt), 50);
 }
-document.addEventListener("DOMContentLoaded", (event) => {
 
+const getMonthIndices = (yearAndMonth, historyArray) => 
+	[historyArray.findIndex(line => line.startsWith(yearAndMonth)),
+	historyArray.length - 1 - historyArray.slice().reverse().findIndex(line => line.startsWith(yearAndMonth))]
+	
+
+const goBack = () => {
+	if (searchedMonth >= 1) {
+		searchedMonth -= 1;	
+	}
+	historyChart.destroy();
+	draw();
+}
+
+const goForward = () => {
+	if (searchedMonth < 12) {
+		searchedMonth += 1;	
+	}
+	historyChart.destroy();
+	draw();
+}
+
+document.addEventListener("DOMContentLoaded", (event) => {
+	draw().then(() => refresh(document.getElementById("counter"), historyChart));
+});
+
+const draw = () => {
 	let counter = document.getElementById("counter")
-	let historyChart = null;
-	fetch('https://howmanytimeshaveiunlockedmyphonetoday.rasimas.lt/history.txt')
-		.then(response => response.text())
-		.then(resp => {
+	return historyArray.then(farr => {
+			let today = `${todayDate.getFullYear()}-${(searchedMonth + 1).toString().padStart(2, '0')}`
+			farr = farr.slice();
+			if (searchedMonth === todayDate.getMonth()) {
+				today += `-${todayDate.getDate().toString().padStart(2, '0')}`;
+				farr.push(`${today}: 1`);
+			}
+			const searchedMonthHistoryIndices = getMonthIndices(`${todayDate.getFullYear()}-${(searchedMonth + 1).toString().padStart(2, '0')}`, farr);
+			if (searchedMonthHistoryIndices[0] === 0) {
+				document.getElementById('arrowLeft').style.visibility = "hidden";
+			} else {
+				document.getElementById('arrowLeft').style.visibility = "visible";
+			}
+			if (searchedMonthHistoryIndices[1] === farr.length - 1) {
+				document.getElementById('arrowRight').style.visibility = "hidden";
+			} else {
+				document.getElementById('arrowRight').style.visibility = "visible";
+			}
+			farr = farr.slice(searchedMonthHistoryIndices[0], searchedMonthHistoryIndices[1] + 1)
 			let title = '';
-			let farr = resp.split('\n');
-			farr.pop();
 			let obj = farr.reduce((acc, el) => {
 				let labelAndData = el.split(': ');
 				if (!acc['labels']) {
@@ -34,7 +91,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
 					acc['data'] = [];
 				}
 				labelAndData[0] = labelAndData[0].split('-');
-				if (title === '') title = `${months[parseInt(labelAndData[0][1], 10) - 1]}, ${labelAndData[0][0]}`;
+				if (title === '') title = `${months[(searchedMonth).toString()]}, ${todayDate.getFullYear()}`;
 				labelAndData[0].shift();
 				labelAndData[0].shift();
 				acc['labels'].push(labelAndData[0]);
@@ -44,9 +101,6 @@ document.addEventListener("DOMContentLoaded", (event) => {
 			Chart.defaults.font.family = 'Montserrat';
 			Chart.defaults.color = "white";
 			Chart.defaults.borderColor = "white";
-			obj['data'].push("1");
-			let today = new Date(new Date().toLocaleString("lt-LT", { timeZone: 'Europe/Vilnius' })).getDate().toString().padStart(2, '0')
-			obj['labels'].push(today);
 			let ctx = document.getElementById('historyChart').getContext('2d');
 			historyChart = new Chart(ctx, {
 				type: 'line',
@@ -85,6 +139,9 @@ document.addEventListener("DOMContentLoaded", (event) => {
 								drawTicks: false,
 							},
 							grace: '10%',
+							ticks: {
+								padding: 10
+							}
 						},
 						x: {
 							title: {
@@ -113,7 +170,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
 					},
 				},
 				plugins: [{
-					afterDatasetDraw: (chart) => {
+					afterDatasetsDraw: (chart) => {
 						const ctx = chart.ctx;
 						const dataset = chart.data.datasets[0];
 						const datasetMeta = chart.getDatasetMeta(0);
@@ -133,10 +190,9 @@ document.addEventListener("DOMContentLoaded", (event) => {
 							ctx.fillStyle = fontColor;
 							ctx.fillText(value, x, y - radius - fontSize);
 						});
-					}
+					},
 				}]
 			});
-			refresh(counter, historyChart)
-		});
 
-})
+	});
+}

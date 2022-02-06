@@ -14,3 +14,4 @@ captures
 .cxx
 local.properties
 **/env
+__pycache__

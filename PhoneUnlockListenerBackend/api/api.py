@@ -33,5 +33,6 @@ def how_many_times():
     response.headers.add("Access-Control-Allow-Origin", "*")
     return response
 
+
 if __name__ == "__main__":
     app.run()
