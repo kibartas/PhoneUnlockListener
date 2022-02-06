@@ -13,11 +13,11 @@
 			<h1>I unlocked my phone <span id="counter"></span> times today</h1>
 			<h3>History</h3>
 			<div id="canvasAndArrows" style="display: flex; align-items: center;">
-				<div style="border-right: 14px solid rgba(40, 223, 40, 1); border-top: 14px solid transparent; border-bottom: 14px solid transparent; width: 0; height: 0;cursor:pointer;" onclick="goBack()" id="arrowLeft"></div>
+				<div onclick="goBack()" id="arrowLeft"></div>
 				<div id="canvasHolder">
 					<canvas id="historyChart"></canvas>
 				</div>
-				<div style="border-left: 14px solid rgba(40, 223, 40, 1); border-top: 14px solid transparent; border-bottom: 14px solid transparent; width: 0; height: 0;cursor:pointer;visibility: collapse;" onclick="goForward()" id="arrowRight"></div>
+				<div onclick="goForward()" id="arrowRight"></div>
 			</div>
 		</div>
 		<footer>
