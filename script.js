@@ -162,12 +162,6 @@ const draw = () => {
 						}
 					},
 					plugins: {
-						title: {
-							display: true,
-							text: title,
-							color: 'rgba(40, 223, 40, 1)', 
-							font: { weight: 'normal', size: '18px' }
-						},
 						legend: {
 							display: false,
 						},
